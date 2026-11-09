@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a2230"/>
+      <stop offset="1" stop-color="#07090d"/>
+    </linearGradient>
+    <linearGradient id="top" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#ffd75c"/>
+      <stop offset="1" stop-color="#ffc22e"/>
+    </linearGradient>
+    <linearGradient id="left" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d38b00"/>
+      <stop offset="1" stop-color="#bd7500"/>
+    </linearGradient>
+    <linearGradient id="right" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2a900"/>
+      <stop offset="1" stop-color="#d98d00"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.55">
+      <stop offset="0" stop-color="#ffb703" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#ffb703" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <rect width="64" height="64" rx="14" fill="url(#glow)"/>
+  <ellipse cx="32" cy="49.5" rx="18" ry="3.4" fill="#000" opacity="0.4"/>
+  <path d="M32 14.5 50 24.5 32 34.5 14 24.5Z" fill="#1a1204" opacity="0.85" transform="translate(0 0.7)"/>
+  <path d="M14 24.5 32 34.5V44L14 34Z" fill="url(#left)"/>
+  <path d="M50 24.5 32 34.5V44L50 34Z" fill="url(#right)"/>
+  <path d="M32 14.5 50 24.5 32 34.5 14 24.5Z" fill="url(#top)"/>
+  <path d="M32 15.6 48 24.5 32 24.2 16 24.5Z" fill="#ffe89a" opacity="0.35"/>
+  <g>
+    <ellipse cx="25.5" cy="24.9" rx="3.4" ry="1.8" fill="#b37300"/>
+    <ellipse cx="25.5" cy="23.4" rx="3.4" ry="1.8" fill="#ffd75c"/>
+    <ellipse cx="32" cy="20.6" rx="3.4" ry="1.8" fill="#b37300"/>
+    <ellipse cx="32" cy="19.1" rx="3.4" ry="1.8" fill="#ffd75c"/>
+    <ellipse cx="32" cy="28.2" rx="3.4" ry="1.8" fill="#b37300"/>
+    <ellipse cx="32" cy="26.7" rx="3.4" ry="1.8" fill="#ffd75c"/>
+    <ellipse cx="38.5" cy="24.9" rx="3.4" ry="1.8" fill="#b37300"/>
+    <ellipse cx="38.5" cy="23.4" rx="3.4" ry="1.8" fill="#ffd75c"/>
+  </g>
+  <path d="M32 14.5 50 24.5 32 34.5 14 24.5Z" fill="none" stroke="#e9a300" stroke-width="0.6" opacity="0.6"/>
+</svg>

@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Brick Rigs Web — гараж і міні-пісочниця</title>
+    <meta
+      name="description"
+      content="Неофіційний браузерний гараж Brick Rigs: відкрий свої .brv просто у вкладці, роздивись у 3D і покатай у міні-пісочниці. Повну гру можна стрімити з ПК."
+    />
+    <meta name="theme-color" content="#0b0d12" />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./assets/icon-192.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#garage">Перейти до гаража</a>
+
+    <svg class="sprite" aria-hidden="true" focusable="false">
+      <symbol id="i-brick" viewBox="0 0 24 24">
+        <path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        <path d="M4 7.5 12 12l8-4.5M12 12v9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        <circle cx="8" cy="6.4" r="1" fill="currentColor"/>
+        <circle cx="16" cy="6.4" r="1" fill="currentColor"/>
+      </symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24">
+        <path d="M12 16V4m0 0L7 9m5-5 5 5M5 16v3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24">
+        <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="i-play" viewBox="0 0 24 24">
+        <path d="M8 5.5v13l10-6.5z" fill="currentColor"/>
+      </symbol>
+      <symbol id="i-reset" viewBox="0 0 24 24">
+        <path d="M4 10a8 8 0 1 1 2 7M4 10V5m0 5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M12 2v2m0 16v2M4.2 4.2l1.4 1.4m12.8 12.8 1.4 1.4M2 12h2m16 0h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24">
+        <path d="M20 15.2A8.5 8.5 0 0 1 8.8 4a8.5 8.5 0 1 0 11.2 11.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M3 12h18M12 3c2.5 2.5 3.7 5.6 3.7 9S14.5 18.5 12 21c-2.5-2.5-3.7-5.6-3.7-9S9.5 5.5 12 3z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      </symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24">
+        <rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24">
+        <path d="m5 12.5 4.5 4.5L19 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="i-external" viewBox="0 0 24 24">
+        <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="i-cloud" viewBox="0 0 24 24">
+        <path d="M7 18h10a4 4 0 0 0 .8-7.9A6 6 0 0 0 6.2 9.5 4.3 4.3 0 0 0 7 18z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="i-monitor" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M8 21h8m-4-4v4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-gamepad" viewBox="0 0 24 24">
+        <path d="M7 8h10a5 5 0 0 1 4.7 6.8l-.8 2.2a2.2 2.2 0 0 1-3.7.7L15 15H9l-2.2 2.7a2.2 2.2 0 0 1-3.7-.7l-.8-2.2A5 5 0 0 1 7 8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M7 11v3m-1.5-1.5h3M16 11.5h.01M18.5 13h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-download" viewBox="0 0 24 24">
+        <path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24">
+        <rect x="7" y="2.5" width="10" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M11 18.5h2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-wifi" viewBox="0 0 24 24">
+        <path d="M3 9a14 14 0 0 1 18 0M6 12.5a9.5 9.5 0 0 1 12 0M9 16a5 5 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        <circle cx="12" cy="19" r="1.2" fill="currentColor"/>
+      </symbol>
+      <symbol id="i-keyboard" viewBox="0 0 24 24">
+        <rect x="2.5" y="6" width="19" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M6 9.5h.01M9.5 9.5h.01M13 9.5h.01M16.5 9.5h.01M20 9.5h.01M6 12.5h.01M9.5 12.5h.01M13 12.5h.01M16.5 12.5h.01M20 12.5h.01M8 15.5h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-info" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M12 11v5m0-8.5h.01" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-warning" viewBox="0 0 24 24">
+        <path d="M12 3 22 20H2z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        <path d="M12 9v5m0 3h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24">
+        <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-close" viewBox="0 0 24 24">
+        <path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-car" viewBox="0 0 24 24">
+        <path d="M4 14h16l-1.5-5.5A2 2 0 0 0 16.6 7H7.4a2 2 0 0 0-1.9 1.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        <path d="M3 14v4h2m14 0h2v-4M7 18h10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        <circle cx="7" cy="15.5" r="1.5" fill="currentColor"/>
+        <circle cx="17" cy="15.5" r="1.5" fill="currentColor"/>
+      </symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24">
+        <path d="m12 2 2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="i-qr" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <rect x="14" y="3" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <rect x="3" y="14" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M14 14h3v3h-3zm5 0h2v2h-2zm-5 5h2v2h-2zm4 1h3v2h-3z" fill="currentColor"/>
+      </symbol>
+    </svg>
+
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href="#top" aria-label="Brick Rigs Web">
+          <span class="brand-mark"><svg class="icon"><use href="#i-brick"></use></svg></span>
+          <span class="brand-text">BRICK RIGS <b>WEB</b></span>
+        </a>
+
+        <nav class="nav" id="mainNav" aria-label="Головна навігація">
+          <a href="#garage" data-i18n="nav.garage">Гараж</a>
+          <a href="#drive" data-i18n="nav.drive">Покатати</a>
+          <a href="#full-game" data-i18n="nav.full">Повна гра</a>
+          <a href="#faq" data-i18n="nav.faq">FAQ</a>
+        </nav>
+
+        <div class="topbar-actions">
+          <span class="local-badge" title="Файли не завантажуються на сервер">
+            <span class="dot"></span>
+            <span data-i18n="header.online">Працює локально</span>
+          </span>
+          <button class="icon-btn lang-btn" id="langToggle" type="button" aria-label="Змінити мову" data-i18n-aria="a11y.lang">
+            <svg class="icon"><use href="#i-globe"></use></svg>
+            <span id="langLabel">EN</span>
+          </button>
+          <button class="icon-btn" id="themeToggle" type="button" aria-label="Перемкнути тему" data-i18n-aria="a11y.theme">
+            <svg class="icon theme-icon-dark"><use href="#i-sun"></use></svg>
+            <svg class="icon theme-icon-light"><use href="#i-moon"></use></svg>
+          </button>
+          <button class="icon-btn menu-btn" id="menuToggle" type="button" aria-label="Меню" data-i18n-aria="a11y.menu" aria-expanded="false">
+            <svg class="icon"><use href="#i-menu"></use></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="shell hero-grid">
+          <div class="hero-copy">
+            <span class="kicker"><svg class="icon"><use href="#i-spark"></use></svg><span data-i18n="hero.badge">Неофіційний браузерний гараж</span></span>
+            <h1>
+              <span data-i18n="hero.title1">Твої цеглинки.</span><br />
+              <span class="accent" data-i18n="hero.title2">Твій браузер.</span>
+            </h1>
+            <p class="lead" data-i18n="hero.subtitle">
+              Закинь файл .brv з Brick Rigs — роздивись свою машину в 3D і покатай її в міні-пісочниці. А повну гру можна стрімити з власного ПК прямо у вкладку.
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" id="heroDrop" type="button">
+                <svg class="icon"><use href="#i-upload"></use></svg>
+                <span data-i18n="hero.drop">Закинути .brv</span>
+              </button>
+              <button class="btn btn-ghost" id="heroDemo" type="button">
+                <svg class="icon"><use href="#i-play"></use></svg>
+                <span data-i18n="hero.demo">Спробувати демо</span>
+              </button>
+            </div>
+            <p class="microcopy"><svg class="icon"><use href="#i-info"></use></svg><span data-i18n="hero.note">Файли не завантажуються на сервер. Усе відбувається у твоєму браузері.</span></p>
+
+            <div class="hero-stats">
+              <div><strong data-i18n="hero.stat1">0 завантажень</strong><span data-i18n="hero.stat1label">файли залишаються у тебе</span></div>
+              <div><strong data-i18n="hero.stat2">3D + фізика</strong><span data-i18n="hero.stat2label">перегляд і водіння</span></div>
+              <div><strong data-i18n="hero.stat3">UA / EN</strong><span data-i18n="hero.stat3label">дві мови інтерфейсу</span></div>
+            </div>
+          </div>
+
+          <div class="hero-art" aria-hidden="true">
+            <div class="art-glow"></div>
+            <div class="brick-car">
+              <div class="car-shadow"></div>
+              <div class="car-body">
+                <div class="car-cabin">
+                  <span class="stud s1"></span><span class="stud s2"></span><span class="stud s3"></span>
+                </div>
+                <div class="car-hood"><span class="stud s1"></span><span class="stud s2"></span></div>
+                <div class="car-bumper front"></div>
+                <div class="car-bumper back"></div>
+                <div class="car-light left"></div>
+                <div class="car-light right"></div>
+                <div class="wheel w1"></div>
+                <div class="wheel w2"></div>
+                <div class="wheel w3"></div>
+                <div class="wheel w4"></div>
+              </div>
+            </div>
+            <div class="loose-brick b1"></div>
+            <div class="loose-brick b2"></div>
+            <div class="loose-brick b3"></div>
+            <div class="art-tag"><svg class="icon"><use href="#i-brick"></use></svg><span>.BRV → 3D</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="garage">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="kicker" data-i18n="garage.kicker">Гараж</span>
+              <h2 data-i18n="garage.title">Відкрий своє творіння</h2>
+            </div>
+            <p data-i18n="garage.subtitle">
+              Перетягни .brv, zip або цілу теку Brick Rigs. Якщо це тека гри — знайдемо файли машин і підкажемо, як запустити повну гру.
+            </p>
+          </div>
+
+          <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Закинути файли .brv, zip або теку гри">
+            <div class="drop-icon"><svg class="icon"><use href="#i-upload"></use></svg></div>
+            <div class="drop-copy">
+              <strong data-i18n="drop.title">Перетягни файли сюди</strong>
+              <span data-i18n="drop.subtitle">або натисни, щоб вибрати .brv, .zip чи теку гри</span>
+            </div>
+            <div class="drop-actions">
+              <button class="btn btn-small" id="fileButton" type="button"><svg class="icon"><use href="#i-folder"></use></svg><span data-i18n="drop.button">Вибрати файли</span></button>
+              <button class="btn btn-small btn-ghost" id="folderButton" type="button"><svg class="icon"><use href="#i-folder"></use></svg><span data-i18n="drop.folder">Вибрати теку</span></button>
+            </div>
+            <div class="drop-meta">
+              <span data-i18n="drop.hint">.brv · .zip · тека Brick Rigs</span>
+              <span class="drop-local"><span class="dot"></span><span data-i18n="drop.local">Локально · без завантаження на сервер</span></span>
+            </div>
+          </div>
+
+          <div class="game-notice" id="gameNotice" hidden>
+            <div class="notice-icon"><svg class="icon"><use href="#i-warning"></use></svg></div>
+            <div class="notice-copy">
+              <strong data-i18n="game.detectedTitle">Знайдено теку Brick Rigs</strong>
+              <p data-i18n="game.detectedText">Це повна UE4-гра для ПК. Браузер не може запустити її .exe напряму — але ти можеш грати в неї у вкладці через хмарний геймінг або стрімінг зі свого ПК.</p>
+              <p class="notice-detail" id="gameNoticeDetail"></p>
+            </div>
+            <div class="notice-actions">
+              <a class="btn btn-small" href="https://play.geforcenow.com/" target="_blank" rel="noopener"><svg class="icon"><use href="#i-cloud"></use></svg><span data-i18n="game.gfn">Відкрити GeForce NOW</span></a>
+              <a class="btn btn-small btn-ghost" href="#full-game"><svg class="icon"><use href="#i-monitor"></use></svg><span data-i18n="game.stream">Як стрімити з ПК</span></a>
+            </div>
+          </div>
+
+          <div class="garage-grid">
+            <div class="viewer-card">
+              <div class="viewer-top">
+                <div class="viewer-title">
+                  <span class="status-dot"></span>
+                  <span id="viewerFileName" data-i18n="garage.emptyTitle">Тут з’явиться твоя машина</span>
+                </div>
+                <div class="stats-chips" id="statsChips">
+                  <span class="chip"><b id="statBricks">—</b><span data-i18n="garage.stats.bricks">Цеглинок</span></span>
+                  <span class="chip"><b id="statSize">—</b><span data-i18n="garage.stats.size">Розмір</span></span>
+                  <span class="chip"><b id="statTypes">—</b><span data-i18n="garage.stats.types">Типів</span></span>
+                  <span class="chip"><b id="statWheels">—</b><span data-i18n="garage.stats.wheels">Коліс</span></span>
+                </div>
+              </div>
+
+              <div class="canvas-wrap" id="canvasWrap">
+                <canvas id="viewerCanvas" aria-label="3D перегляд машини Brick Rigs"></canvas>
+                <div class="viewer-empty" id="viewerEmpty">
+                  <div class="empty-icon"><svg class="icon"><use href="#i-brick"></use></svg></div>
+                  <strong data-i18n="garage.emptyTitle">Тут з’явиться твоя машина</strong>
+                  <p data-i18n="garage.emptyText">Почни з демо або закинь власний .brv.</p>
+                  <div class="empty-actions">
+                    <button class="btn btn-small" type="button" data-demo="car"><svg class="icon"><use href="#i-car"></use></svg><span data-i18n="garage.demoCar">Демо: спорткар</span></button>
+                    <button class="btn btn-small btn-ghost" type="button" data-demo="truck"><svg class="icon"><use href="#i-gamepad"></use></svg><span data-i18n="garage.demoTruck">Демо: вантажівка</span></button>
+                  </div>
+                </div>
+                <div class="viewer-loading" id="viewerLoading" hidden><span class="spinner"></span><span data-i18n="garage.loading">Читаю .brv…</span></div>
+                <div class="viewer-controls">
+                  <button class="btn btn-small btn-ghost" id="resetCamera" type="button"><svg class="icon"><use href="#i-reset"></use></svg><span data-i18n="garage.resetCamera">Скинути камеру</span></button>
+                  <button class="btn btn-small" id="driveFromGarage" type="button"><svg class="icon"><use href="#i-play"></use></svg><span data-i18n="garage.drive">Покатати</span></button>
+                </div>
+                <div class="viewer-note" id="viewerNote" hidden><svg class="icon"><use href="#i-info"></use></svg><span></span></div>
+              </div>
+            </div>
+
+            <aside class="garage-side">
+              <div class="side-card">
+                <div class="side-head">
+                  <h3 data-i18n="garage.list">Знайдені машини</h3>
+                  <span class="count" id="vehicleCount">0</span>
+                </div>
+                <div class="vehicle-list" id="vehicleList">
+                  <p class="muted" data-i18n="garage.emptyText">Почни з демо або закинь власний .brv.</p>
+                </div>
+              </div>
+
+              <div class="side-card demo-card">
+                <h3 data-i18n="common.demo">Демо</h3>
+                <button class="demo-row" type="button" data-demo="car">
+                  <span class="demo-thumb car"></span>
+                  <span><strong data-i18n="garage.demoCar">Демо: спорткар</strong><small>ScalableBrick · 15</small></span>
+                  <svg class="icon"><use href="#i-play"></use></svg>
+                </button>
+                <button class="demo-row" type="button" data-demo="truck">
+                  <span class="demo-thumb truck"></span>
+                  <span><strong data-i18n="garage.demoTruck">Демо: вантажівка</strong><small>OffroadWheel · 14</small></span>
+                  <svg class="icon"><use href="#i-play"></use></svg>
+                </button>
+              </div>
+
+              <div class="side-card tip-card">
+                <div class="tip-icon"><svg class="icon"><use href="#i-info"></use></svg></div>
+                <p data-i18n="hero.note">Файли не завантажуються на сервер. Усе відбувається у твоєму браузері.</p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section drive-section" id="drive">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="kicker" data-i18n="drive.kicker">Міні-пісочниця</span>
+              <h2 data-i18n="drive.title">Покатай свою машину</h2>
+            </div>
+            <p data-i18n="drive.subtitle">
+              Спрощена аркадна фізика: цеглинки не ламаються, але машина їде, повертає і розкидає ящики. Для справжньої фізики Brick Rigs — стрім з ПК.
+            </p>
+          </div>
+
+          <div class="drive-card">
+            <div class="drive-canvas-wrap" id="driveWrap">
+              <div class="drive-empty" id="driveEmpty">
+                <svg class="icon"><use href="#i-car"></use></svg>
+                <strong data-i18n="drive.noVehicle">Спочатку відкрий .brv у гаражі.</strong>
+                <a class="btn btn-small" href="#garage" data-i18n="nav.garage">Гараж</a>
+              </div>
+              <div class="hud" id="driveHud" hidden>
+                <div class="hud-block"><span data-i18n="drive.speed">Швидкість</span><b><span id="speedValue">0</span><small>км/год</small></b></div>
+                <div class="hud-block"><span data-i18n="drive.distance">Дистанція</span><b><span id="distanceValue">0</span><small>м</small></b></div>
+              </div>
+              <div class="drive-top-actions" id="driveTopActions" hidden>
+                <button class="btn btn-small btn-ghost" id="resetDrive" type="button"><svg class="icon"><use href="#i-reset"></use></svg><span data-i18n="drive.reset">Скинути машину</span></button>
+                <button class="btn btn-small" id="exitDrive" type="button"><svg class="icon"><use href="#i-close"></use></svg><span data-i18n="drive.exit">Вийти з заїзду</span></button>
+              </div>
+              <div class="drive-hint" id="driveHint"><svg class="icon"><use href="#i-keyboard"></use></svg><span data-i18n="drive.hint">WASD / стрілки · пробіл — гальмо · R — скинути · Esc — вийти</span></div>
+              <div class="touch-controls" id="touchControls" aria-label="Сенсорне керування">
+                <button type="button" data-touch="left" aria-label="Ліворуч">←</button>
+                <div class="touch-right">
+                  <button type="button" data-touch="forward" aria-label="Газ">↑</button>
+                  <button type="button" data-touch="back" aria-label="Назад">↓</button>
+                  <button type="button" data-touch="right" aria-label="Праворуч">→</button>
+                </div>
+              </div>
+            </div>
+            <div class="drive-bar">
+              <button class="btn btn-primary" id="startDrive" type="button"><svg class="icon"><use href="#i-play"></use></svg><span data-i18n="drive.start">Почати заїзд</span></button>
+              <span class="drive-note"><svg class="icon"><use href="#i-info"></use></svg><span data-i18n="drive.hint">WASD / стрілки · пробіл — гальмо · R — скинути · Esc — вийти</span></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section full-section" id="full-game">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="kicker" data-i18n="full.kicker">Справжня гра</span>
+              <h2 data-i18n="full.title">Повна Brick Rigs у браузері</h2>
+            </div>
+            <p data-i18n="full.subtitle">
+              Так, це можливо — але гру виконує не браузер, а твій ПК або хмарний сервер, який передає відео у вкладку. Ось два робочі шляхи.
+            </p>
+          </div>
+
+          <div class="why-card">
+            <div class="why-icon"><svg class="icon"><use href="#i-warning"></use></svg></div>
+            <div>
+              <h3 data-i18n="full.whyTitle">Чому не можна просто закинути .exe?</h3>
+              <ul>
+                <li data-i18n="full.why1">Brick Rigs — 64-бітна UE4-гра з DirectX 11. Браузер не виконує Windows .exe і не дає прямого доступу до GPU так, як Windows.</li>
+                <li data-i18n="full.why2">Це не ROM для емулятора: емулятори консолей не запускають ПК-гру. WebAssembly-версії гри не існує.</li>
+                <li data-i18n="full.why3">Єдиний спосіб грати саме в повну гру у вкладці — стрімінг з ПК або хмари. Файли при цьому залишаються у тебе.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stream-grid">
+            <article class="stream-card gfn-card">
+              <div class="stream-head">
+                <span class="stream-logo gfn"><svg class="icon"><use href="#i-cloud"></use></svg></span>
+                <span class="badge" data-i18n="full.gfnBadge">Найшвидший старт</span>
+              </div>
+              <h3 data-i18n="full.gfnTitle">GeForce NOW</h3>
+              <p data-i18n="full.gfnText">
+                Якщо Brick Rigs у тебе в Steam — відкрий GeForce NOW у браузері, підключи Steam і запускай гру. Нічого встановлювати не треба.
+              </p>
+              <a class="btn btn-primary" href="https://play.geforcenow.com/" target="_blank" rel="noopener"><svg class="icon"><use href="#i-external"></use></svg><span data-i18n="full.gfnButton">Грати в GeForce NOW</span></a>
+              <p class="fineprint" data-i18n="full.gfnNote">Потрібна власна копія гри в Steam. Доступність залежить від регіону та тарифу.</p>
+            </article>
+
+            <article class="stream-card mw-card" id="moonlight">
+              <div class="stream-head">
+                <span class="stream-logo mw"><svg class="icon"><use href="#i-monitor"></use></svg></span>
+                <span class="badge badge-quiet" data-i18n="full.mwBadge">Без підписки</span>
+              </div>
+              <h3 data-i18n="full.mwTitle">MoonlightWeb</h3>
+              <p data-i18n="full.mwText">
+                MoonlightWeb ставиться на твій ігровий ПК і віддає його екран у будь-який браузер. Додай Brick Rigs як картку застосунку — і запускай з телефона, ноутбука чи телевізора.
+              </p>
+
+              <ol class="steps">
+                <li><span>1</span><p data-i18n="full.mwStep1">Завантаж і встанови MoonlightWeb на ПК, де встановлена Brick Rigs.</p></li>
+                <li><span>2</span><p data-i18n="full.mwStep2">Відкрий https://localhost у браузері на цьому ПК і прийми самопідписаний сертифікат.</p></li>
+                <li><span>3</span><p data-i18n="full.mwStep3">У Admin → Apps on this PC додай картку з командою нижче.</p></li>
+                <li><span>4</span><p data-i18n="full.mwStep4">Запусти гру з картки — або відкрий стрім з іншого пристрою в тій самій мережі.</p></li>
+              </ol>
+
+              <div class="command-box">
+                <div class="command-head">
+                  <span data-i18n="full.mwCommand">Команда для картки</span>
+                  <button class="copy-btn" id="copyCommand" type="button"><svg class="icon"><use href="#i-copy"></use></svg><span data-i18n="common.copy">Копіювати</span></button>
+                </div>
+                <code id="appCommand">steam://rungameid/552100</code>
+                <p data-i18n="full.mwCommandHint">Найпростіше — Steam-посилання. Якщо гра встановлена не через Steam, вкажи повний шлях до BrickRigs.exe у лапках.</p>
+                <div class="image-row">
+                  <span data-i18n="full.mwImage">Картинка для картки</span>
+                  <code id="appImage">https://cdn.cloudflare.steamstatic.com/steam/apps/552100/header.jpg</code>
+                  <button class="copy-btn small" id="copyImage" type="button" aria-label="Копіювати посилання на картинку"><svg class="icon"><use href="#i-copy"></use></svg></button>
+                </div>
+              </div>
+
+              <div class="mw-actions">
+                <a class="btn btn-primary" href="https://moonlightweb.top/#download" target="_blank" rel="noopener"><svg class="icon"><use href="#i-download"></use></svg><span data-i18n="full.mwDownload">Завантажити MoonlightWeb</span></a>
+                <a class="btn btn-ghost" href="https://localhost" target="_blank" rel="noopener"><svg class="icon"><use href="#i-play"></use></svg><span data-i18n="full.mwOpen">Відкрити локальний стрім</span></a>
+              </div>
+
+              <div class="lan-panel">
+                <div class="lan-form">
+                  <label for="hostInput" data-i18n="full.mwHost">Адреса твого ПК у мережі</label>
+                  <div class="input-row">
+                    <input id="hostInput" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="192.168.1.50" data-i18n-placeholder="full.mwHostPlaceholder" />
+                    <button class="btn btn-small" id="openHost" type="button"><svg class="icon"><use href="#i-external"></use></svg><span data-i18n="full.mwOpenHost">Відкрити стрім</span></button>
+                  </div>
+                  <p data-i18n="full.mwLanHint">Дізнайся IP на ПК: Windows — ipconfig, Linux — ip a, macOS — ipconfig getifaddr en0. Пристрої мають бути в одній Wi-Fi/локальній мережі.</p>
+                  <div class="cmd-chips">
+                    <button type="button" data-copy-text="ipconfig"><span data-i18n="full.mwWinCmd">Windows: ipconfig</span><svg class="icon"><use href="#i-copy"></use></svg></button>
+                    <button type="button" data-copy-text="ip a"><span data-i18n="full.mwLinuxCmd">Linux: ip a</span><svg class="icon"><use href="#i-copy"></use></svg></button>
+                    <button type="button" data-copy-text="ipconfig getifaddr en0"><span data-i18n="full.mwMacCmd">macOS: ipconfig getifaddr en0</span><svg class="icon"><use href="#i-copy"></use></svg></button>
+                  </div>
+                </div>
+                <div class="qr-box">
+                  <span data-i18n="full.mwQr">QR для телефона</span>
+                  <div id="qrCode" class="qr-code"><svg class="icon"><use href="#i-qr"></use></svg></div>
+                </div>
+              </div>
+
+              <p class="fineprint" data-i18n="full.mwNote">MoonlightWeb — сторонній відкритий проєкт (GPL-3.0), не пов’язаний з Fluppisoft.</p>
+            </article>
+          </div>
+
+          <p class="legal-note"><svg class="icon"><use href="#i-info"></use></svg><span data-i18n="full.legal">Ти використовуєш власну легальну копію гри. Сайт не хостить і не розповсюджує файли Brick Rigs.</span></p>
+        </div>
+      </section>
+
+      <section class="section faq-section" id="faq">
+        <div class="shell">
+          <div class="section-head narrow">
+            <div>
+              <span class="kicker" data-i18n="faq.kicker">Питання</span>
+              <h2 data-i18n="faq.title">Коротко про головне</h2>
+            </div>
+          </div>
+          <div class="faq-list">
+            <details>
+              <summary><span data-i18n="faq.q1">Чи можна запустити справжню Brick Rigs з файлів у вкладці?</span><svg class="icon"><use href="#i-plus"></use></svg></summary>
+              <p data-i18n="faq.a1">Ні. Це UE4-гра під Windows/Linux з DirectX 11, а не консольний ROM. Браузер не виконує .exe. Але ти можеш грати в неї через GeForce NOW або стрімінг зі свого ПК — це і є «браузерний» варіант.</p>
+            </details>
+            <details>
+              <summary><span data-i18n="faq.q2">Що таке .brv?</span><svg class="icon"><use href="#i-plus"></use></svg></summary>
+              <p data-i18n="faq.a2">.brv — файл машини Brick Rigs: цеглинки, їхні позиції, повороти, кольори та властивості. Цей сайт читає його локально і будує 3D-модель.</p>
+            </details>
+            <details>
+              <summary><span data-i18n="faq.q3">Мої файли кудись надсилаються?</span><svg class="icon"><use href="#i-plus"></use></svg></summary>
+              <p data-i18n="faq.a3">Ні. Парсинг, 3D і фізика працюють у браузері. Немає ні завантаження на сервер, ні акаунта.</p>
+            </details>
+            <details>
+              <summary><span data-i18n="faq.q4">Чи працює на телефоні?</span><svg class="icon"><use href="#i-plus"></use></svg></summary>
+              <p data-i18n="faq.a4">Гараж і перегляд — так. У заїзді є екранні кнопки. Стрімінг повної гри теж працює з мобільного браузера, якщо ПК доступний у мережі.</p>
+            </details>
+            <details>
+              <summary><span data-i18n="faq.q5">Чи це офіційний сайт Brick Rigs?</span><svg class="icon"><use href="#i-plus"></use></svg></summary>
+              <p data-i18n="faq.a5">Ні, це неофіційний фанатський інструмент. Brick Rigs належить Fluppisoft. Сайт не пов’язаний з розробником.</p>
+            </details>
+            <details>
+              <summary><span data-i18n="faq.q6">Які браузери підтримуються?</span><svg class="icon"><use href="#i-plus"></use></svg></summary>
+              <p data-i18n="faq.a6">Сучасні Chrome, Edge, Firefox і Safari з WebGL2. Для стрімінгу — браузер із WebCodecs/WebRTC; найкраще працює Chrome або Edge.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="shell footer-inner">
+        <div class="footer-brand">
+          <span class="brand-mark"><svg class="icon"><use href="#i-brick"></use></svg></span>
+          <div>
+            <strong>BRICK RIGS <span>WEB</span></strong>
+            <p data-i18n="footer.disclaimer">Неофіційний фанатський проєкт. Brick Rigs © Fluppisoft. Сайт не пов’язаний з розробником і не розповсюджує гру.</p>
+          </div>
+        </div>
+        <div class="footer-meta">
+          <span data-i18n="footer.built">Зроблено з Three.js, cannon-es і любов’ю до цеглинок.</span>
+          <a href="https://github.com/aprowaz1-crypto/brick-rigs-web" target="_blank" rel="noopener"><svg class="icon"><use href="#i-external"></use></svg><span data-i18n="footer.source">Код на GitHub</span></a>
+        </div>
+      </div>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <input type="file" id="fileInput" accept=".brv,.zip,application/zip" multiple hidden />
+    <input type="file" id="folderInput" webkitdirectory directory multiple hidden />
+
+    <script src="./vendor/qrcode.js"></script>
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
